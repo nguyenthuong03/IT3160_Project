@@ -25,26 +25,6 @@ from io import BytesIO
 from zipfile import ZipFile
 
 
-def download_and_unzip(url, extract_to="Datasets", chunk_size=1024*1024):
-    http_response = urlopen(url)
-
-    data = b""
-    iterations = http_response.length // chunk_size + 1
-    for _ in tqdm(range(iterations)):
-        data += http_response.read(chunk_size)
-
-    zipfile = ZipFile(BytesIO(data))
-    zipfile.extractall(path=extract_to)
-
-dataset_path = os.path.join("Datasets", "IAM_Words")
-if not os.path.exists(dataset_path):
-    download_and_unzip("https://git.io/J0fjL", extract_to="Datasets")
-
-    file = tarfile.open(os.path.join(dataset_path, "words.tgz"))
-    file.extractall(os.path.join(dataset_path, "words"))
-
-dataset, vocab, max_len = [], set(), 0
-
 # Xử lý trước tập dữ liệu datasets
 words = open(os.path.join(dataset_path, "words.txt"), "r").readlines()
 for line in tqdm(words):
